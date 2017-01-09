@@ -5,20 +5,25 @@ import json
 import urllib
 import requests
 import time
-import sys
+import sys,os
 from lxml.html import fromstring
 import pyperclip
 from threading import Thread
-from bildirim import balloon_tip
 import tkMessageBox
 
 headers = {'referer': "https://www.youtubeinmp3.com/tr/"}
 url = 'https://www.youtubeinmp3.com/tr/download/?video='
-mp3_name = []
+mp3_name = ['resim','müzik']
 preview_mp3_name = ''
 count = 0
 char = ['/', '\\', ':', '?', '<', '>', '"', '|']
 
+def notify(n2):
+    if 'posix' in os.name:
+        os.system("""osascript -e 'display notification "{}" with title "{}" '""".format('YouTube Mp3 Downloader', '{} Indirme tamamlandı.'.format(mp3_name[n2])))
+    else:
+        from bildirim import balloon_tip
+        balloon_tip('YouTube Mp3 Downloader', '{} Indirme tamamlandı.'.format(mp3_name[n2]).decode('utf-8'))
 
 def reporthook(count, block_size, total_size):
     global start_time
@@ -45,16 +50,15 @@ def download(copy, n2):
             saving_name = mp3_name[n2].replace(ch, '')
         urllib.urlretrieve('https://www.youtubeinmp3.com' + down_url, "C:\\Users\\"+getpass.getuser()+"\\Desktop\\" +
                            saving_name + '.mp3', reporthook=reporthook)
-        balloon_tip('YouTube Mp3 Downloader', mp3_name[n2] + ' Indirme tamamlandı.'.decode('utf-8'))
+
+        notify(n2)
 
     except Exception:
         print Exception.message
 
 top = Tkinter.Tk().withdraw()
 
-
 while True:
-
     if pyperclip.paste().startswith('https://www.youtube.com/watch?v=') and preview_mp3_name != pyperclip.paste():
         print 1
         ans = tkMessageBox.askyesno("YouTube Mp3 Downloader", "Indirmek istiyor musunuz?", icon='question')
