@@ -1,4 +1,5 @@
-# coding=utf-8
+# -*- coding=utf-8 -*-
+import Tkinter
 import getpass
 import json
 import urllib
@@ -9,6 +10,7 @@ from lxml.html import fromstring
 import pyperclip
 from threading import Thread
 from bildirim import balloon_tip
+import tkMessageBox
 
 headers = {'referer': "https://www.youtubeinmp3.com/tr/"}
 url = 'https://www.youtubeinmp3.com/tr/download/?video='
@@ -48,11 +50,16 @@ def download(copy, n2):
     except Exception:
         print Exception.message
 
+top = Tkinter.Tk().withdraw()
+
 
 while True:
 
     if pyperclip.paste().startswith('https://www.youtube.com/watch?v=') and preview_mp3_name != pyperclip.paste():
-        Thread(target=download, args=(pyperclip.paste(), count)).start()
+        print 1
+        ans = tkMessageBox.askyesno("YouTube Mp3 Downloader", "Indirmek istiyor musunuz?", icon='question')
+        if ans == 'yes':
+            Thread(target=download, args=(pyperclip.paste(), count)).start()
         preview_mp3_name = pyperclip.paste()
     else:
         time.sleep(1)
