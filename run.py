@@ -13,7 +13,7 @@ import tkMessageBox
 
 headers = {'referer': "https://www.youtubeinmp3.com/tr/"}
 url = 'https://www.youtubeinmp3.com/tr/download/?video='
-mp3_name = ['resim','müzik']
+mp3_name = []
 preview_mp3_name = ''
 count = 0
 char = ['/', '\\', ':', '?', '<', '>', '"', '|']
